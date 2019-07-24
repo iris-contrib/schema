@@ -134,34 +134,34 @@ func TestAll(t *testing.T) {
 		},
 		F09: 0,
 		F10: []S1{
-			S1{
+			{
 				F10: []S1{
-					S1{F06: &[]*int{&f101, &f102}},
-					S1{F06: &[]*int{&f103, &f104}},
+					{F06: &[]*int{&f101, &f102}},
+					{F06: &[]*int{&f103, &f104}},
 				},
 			},
 		},
 		F11: []*S1{
-			&S1{
+			{
 				F11: []*S1{
-					&S1{F06: &[]*int{&f111, &f112}},
-					&S1{F06: &[]*int{&f113, &f114}},
+					{F06: &[]*int{&f111, &f112}},
+					{F06: &[]*int{&f113, &f114}},
 				},
 			},
 		},
 		F12: &[]S1{
-			S1{
+			{
 				F12: &[]S1{
-					S1{F06: &[]*int{&f121, &f122}},
-					S1{F06: &[]*int{&f123, &f124}},
+					{F06: &[]*int{&f121, &f122}},
+					{F06: &[]*int{&f123, &f124}},
 				},
 			},
 		},
 		F13: &[]*S1{
-			&S1{
+			{
 				F13: &[]*S1{
-					&S1{F06: &[]*int{&f131, &f132}},
-					&S1{F06: &[]*int{&f133, &f134}},
+					{F06: &[]*int{&f131, &f132}},
+					{F06: &[]*int{&f133, &f134}},
 				},
 			},
 		},
@@ -925,34 +925,34 @@ func TestAllNT(t *testing.T) {
 		},
 		F9: 0,
 		F10: []S1{
-			S1{
+			{
 				F10: []S1{
-					S1{F06: &[]*int{&f101, &f102}},
-					S1{F06: &[]*int{&f103, &f104}},
+					{F06: &[]*int{&f101, &f102}},
+					{F06: &[]*int{&f103, &f104}},
 				},
 			},
 		},
 		F11: []*S1{
-			&S1{
+			{
 				F11: []*S1{
-					&S1{F06: &[]*int{&f111, &f112}},
-					&S1{F06: &[]*int{&f113, &f114}},
+					{F06: &[]*int{&f111, &f112}},
+					{F06: &[]*int{&f113, &f114}},
 				},
 			},
 		},
 		F12: &[]S1{
-			S1{
+			{
 				F12: &[]S1{
-					S1{F06: &[]*int{&f121, &f122}},
-					S1{F06: &[]*int{&f123, &f124}},
+					{F06: &[]*int{&f121, &f122}},
+					{F06: &[]*int{&f123, &f124}},
 				},
 			},
 		},
 		F13: &[]*S1{
-			&S1{
+			{
 				F13: &[]*S1{
-					&S1{F06: &[]*int{&f131, &f132}},
-					&S1{F06: &[]*int{&f133, &f134}},
+					{F06: &[]*int{&f131, &f132}},
+					{F06: &[]*int{&f133, &f134}},
 				},
 			},
 		},
@@ -1261,7 +1261,7 @@ func TestRegisterConverterSlice(t *testing.T) {
 
 	expected := []string{"one", "two", "three"}
 	decoder.Decode(&result, map[string][]string{
-		"multiple": []string{"one,two,three"},
+		"multiple": {"one,two,three"},
 	})
 	for i := range expected {
 		if got, want := expected[i], result.Multiple[i]; got != want {
@@ -1290,7 +1290,7 @@ func TestRegisterConverterMap(t *testing.T) {
 	}{}
 
 	err := decoder.Decode(&result, map[string][]string{
-		"multiple": []string{"a:one,b:two"},
+		"multiple": {"a:one,b:two"},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -1337,9 +1337,9 @@ type S16 struct {
 
 func TestCustomTypeSlice(t *testing.T) {
 	data := map[string][]string{
-		"Value.0": []string{"Louisa May Alcott"},
-		"Value.1": []string{"Florence Nightingale"},
-		"Value.2": []string{"Clara Barton"},
+		"Value.0": {"Louisa May Alcott"},
+		"Value.1": {"Florence Nightingale"},
+		"Value.2": {"Clara Barton"},
 	}
 
 	s := S13{}
@@ -1365,9 +1365,9 @@ func TestCustomTypeSlice(t *testing.T) {
 
 func TestCustomTypeSliceWithError(t *testing.T) {
 	data := map[string][]string{
-		"Value.0": []string{"Louisa May Alcott"},
-		"Value.1": []string{"Florence Nightingale"},
-		"Value.2": []string{"Clara"},
+		"Value.0": {"Louisa May Alcott"},
+		"Value.1": {"Florence Nightingale"},
+		"Value.2": {"Clara"},
 	}
 
 	s := S13{}
@@ -1380,9 +1380,9 @@ func TestCustomTypeSliceWithError(t *testing.T) {
 
 func TestNoTextUnmarshalerTypeSlice(t *testing.T) {
 	data := map[string][]string{
-		"Value.0": []string{"Louisa May Alcott"},
-		"Value.1": []string{"Florence Nightingale"},
-		"Value.2": []string{"Clara Barton"},
+		"Value.0": {"Louisa May Alcott"},
+		"Value.1": {"Florence Nightingale"},
+		"Value.2": {"Clara Barton"},
 	}
 
 	s := S15{}
@@ -1405,7 +1405,7 @@ type S18 struct {
 
 func TestCustomType(t *testing.T) {
 	data := map[string][]string{
-		"Value": []string{"Louisa May Alcott"},
+		"Value": {"Louisa May Alcott"},
 	}
 
 	s := S17{}
@@ -1422,7 +1422,7 @@ func TestCustomType(t *testing.T) {
 
 func TestCustomTypeWithError(t *testing.T) {
 	data := map[string][]string{
-		"Value": []string{"Louisa"},
+		"Value": {"Louisa"},
 	}
 
 	s := S17{}
@@ -1435,7 +1435,7 @@ func TestCustomTypeWithError(t *testing.T) {
 
 func TestNoTextUnmarshalerType(t *testing.T) {
 	data := map[string][]string{
-		"Value": []string{"Louisa May Alcott"},
+		"Value": {"Louisa May Alcott"},
 	}
 
 	s := S18{}
@@ -1448,9 +1448,9 @@ func TestNoTextUnmarshalerType(t *testing.T) {
 
 func TestExpectedType(t *testing.T) {
 	data := map[string][]string{
-		"bools":   []string{"1", "a"},
-		"date":    []string{"invalid"},
-		"Foo.Bar": []string{"a", "b"},
+		"bools":   {"1", "a"},
+		"date":    {"invalid"},
+		"Foo.Bar": {"a", "b"},
 	}
 
 	type B struct {
@@ -1495,11 +1495,11 @@ type R1 struct {
 func TestRequiredField(t *testing.T) {
 	var a R1
 	v := map[string][]string{
-		"a":   []string{"bbb"},
-		"b.c": []string{"88"},
-		"b.d": []string{"9"},
-		"f":   []string{""},
-		"h":   []string{"true"},
+		"a":   {"bbb"},
+		"b.c": {"88"},
+		"b.d": {"9"},
+		"f":   {""},
+		"h":   {"true"},
 	}
 	err := NewDecoder().Decode(&a, v)
 	if err == nil {
@@ -1878,7 +1878,7 @@ func (s *S20) UnmarshalText(text []byte) error {
 // implementations by its elements.
 func TestTextUnmarshalerTypeSlice(t *testing.T) {
 	data := map[string][]string{
-		"Value": []string{"a,b,c"},
+		"Value": {"a,b,c"},
 	}
 	s := struct {
 		Value S20
@@ -1914,7 +1914,7 @@ type S21B []S21E
 // requirements imposed on a slice of structs.
 func TestTextUnmarshalerTypeSliceOfStructs(t *testing.T) {
 	data := map[string][]string{
-		"Value": []string{"raw a"},
+		"Value": {"raw a"},
 	}
 	// Implements encoding.TextUnmarshaler, should not throw invalid path
 	// error.
@@ -1934,7 +1934,7 @@ func TestTextUnmarshalerTypeSliceOfStructs(t *testing.T) {
 	sb := struct {
 		Value S21B
 	}{}
-	if err := decoder.Decode(&sb, data); err == invalidPath {
+	if err := decoder.Decode(&sb, data); err == errInvalidPath {
 		t.Fatal("Expecting invalid path error", err)
 	}
 }
@@ -1952,7 +1952,7 @@ func (s *S22) UnmarshalText(text []byte) error {
 // especially including simply setting the zero value.
 func TestTextUnmarshalerEmpty(t *testing.T) {
 	data := map[string][]string{
-		"Value": []string{""}, // empty value
+		"Value": {""}, // empty value
 	}
 	// Implements encoding.TextUnmarshaler, should use the type's
 	// UnmarshalText method.

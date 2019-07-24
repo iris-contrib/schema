@@ -1,90 +1,39 @@
 schema
 ======
-[![GoDoc](https://godoc.org/github.com/gorilla/schema?status.svg)](https://godoc.org/github.com/gorilla/schema) [![Build Status](https://travis-ci.org/gorilla/schema.png?branch=master)](https://travis-ci.org/gorilla/schema)
-[![Sourcegraph](https://sourcegraph.com/github.com/gorilla/schema/-/badge.svg)](https://sourcegraph.com/github.com/gorilla/schema?badge)
+[![Build Status](https://travis-ci.org/iris-contrib/schema.png?branch=master)](https://travis-ci.org/iris-contrib/schema)
 
+Package iris-contrib/schema is a clone of https://github.com/gorilla/schema with two additional minor but required features:
 
-Package gorilla/schema converts structs to and from form values.
-
-## Example
-
-Here's a quick example: we parse POST form values and then decode them into a struct:
-
-```go
-// Set a Decoder instance as a package global, because it caches
-// meta-data about structs, and an instance can be shared safely.
-var decoder = schema.NewDecoder()
-
-type Person struct {
-    Name  string
-    Phone string
-}
-
-func MyHandler(w http.ResponseWriter, r *http.Request) {
-    err := r.ParseForm()
-    if err != nil {
-        // Handle error
-    }
-
-    var person Person
-
-    // r.PostForm is a map of our POST form values
-    err = decoder.Decode(&person, r.PostForm)
-    if err != nil {
-        // Handle error
-    }
-
-    // Do something with person.Name or person.Phone
-}
-```
-
-Conversely, contents of a struct can be encoded into form values. Here's a variant of the previous example using the Encoder:
-
-```go
-var encoder = schema.NewEncoder()
-
-func MyHttpRequest() {
-    person := Person{"Jane Doe", "555-5555"}
-    form := url.Values{}
-
-    err := encoder.Encode(person, form)
-
-    if err != nil {
-        // Handle error
-    }
-
-    // Use form values, for example, with an http client
-    client := new(http.Client)
-    res, err := client.PostForm("http://my-api.test", form)
-}
-
-```
-
-To define custom names for fields, use a struct tag "schema". To not populate certain fields, use a dash for the name and it will be ignored:
-
-```go
-type Person struct {
-    Name  string `schema:"name,required"`  // custom name, must be supplied
-    Phone string `schema:"phone"`          // custom name
-    Admin bool   `schema:"-"`              // this field is never set
-}
-```
-
-The supported field types in the struct are:
-
-* bool
-* float variants (float32, float64)
-* int variants (int, int8, int16, int32, int64)
-* string
-* uint variants (uint, uint8, uint16, uint32, uint64)
-* struct
-* a pointer to one of the above types
-* a slice or a pointer to a slice of one of the above types
-
-Unsupported types are simply ignored, however custom types can be registered to be converted.
-
-More examples are available on the Gorilla website: https://www.gorillatoolkit.org/pkg/schema
+1. Default package-level decoders for forms and url queries
+2. Able to use more than one struct field tag to map a field with a key, which is useful when the same struct needs to be mapped with URL query string and form data, as requested two tags names are required so.
 
 ## License
 
-BSD licensed. See the LICENSE file for details.
+Copyright (c) 2012 Rodrigo Moraes. All rights reserved.
+Copyright (c) 2019 Gerasimos Maropoulos for edits. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+	 * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+	 * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+	 * Neither the name of Google Inc. nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

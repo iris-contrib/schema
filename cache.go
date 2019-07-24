@@ -12,14 +12,14 @@ import (
 	"sync"
 )
 
-var invalidPath = errors.New("schema: invalid path")
+var errInvalidPath = errors.New("invalid path")
 
 // newCache returns a new cache.
 func newCache() *cache {
 	c := cache{
 		m:       make(map[reflect.Type]*structInfo),
 		regconv: make(map[reflect.Type]Converter),
-		tag:     "schema",
+		tags:    []string{"form", "url", "schema"},
 	}
 	return &c
 }
@@ -29,7 +29,7 @@ type cache struct {
 	l       sync.RWMutex
 	m       map[reflect.Type]*structInfo
 	regconv map[reflect.Type]Converter
-	tag     string
+	tags    []string
 }
 
 // registerConverter registers a converter function for a custom type.
@@ -53,13 +53,13 @@ func (c *cache) parsePath(p string, t reflect.Type) ([]pathPart, error) {
 	keys := strings.Split(p, ".")
 	for i := 0; i < len(keys); i++ {
 		if t.Kind() != reflect.Struct {
-			return nil, invalidPath
+			return nil, errInvalidPath
 		}
 		if struc = c.get(t); struc == nil {
-			return nil, invalidPath
+			return nil, errInvalidPath
 		}
 		if field = struc.get(keys[i]); field == nil {
-			return nil, invalidPath
+			return nil, errInvalidPath
 		}
 		// Valid field. Append index.
 		path = append(path, field.name)
@@ -72,10 +72,10 @@ func (c *cache) parsePath(p string, t reflect.Type) ([]pathPart, error) {
 			// So checking i+2 is not necessary anymore.
 			i++
 			if i+1 > len(keys) {
-				return nil, invalidPath
+				return nil, errInvalidPath
 			}
 			if index64, err = strconv.ParseInt(keys[i], 10, 0); err != nil {
-				return nil, invalidPath
+				return nil, errInvalidPath
 			}
 			parts = append(parts, pathPart{
 				path:  path,
@@ -152,7 +152,7 @@ func (c *cache) create(t reflect.Type, parentAlias string) *structInfo {
 
 // createField creates a fieldInfo for the given field.
 func (c *cache) createField(field reflect.StructField, parentAlias string) *fieldInfo {
-	alias, options := fieldAlias(field, c.tag)
+	alias, options := fieldAlias(field, c.tags)
 	if alias == "-" {
 		// Ignore this field.
 		return nil
@@ -272,11 +272,15 @@ func indirectType(typ reflect.Type) reflect.Type {
 	return typ
 }
 
-// fieldAlias parses a field tag to get a field alias.
-func fieldAlias(field reflect.StructField, tagName string) (alias string, options tagOptions) {
-	if tag := field.Tag.Get(tagName); tag != "" {
-		alias, options = parseTag(tag)
+// fieldAlias parses a field tag(s) to get a field alias.
+func fieldAlias(field reflect.StructField, tagNames []string) (alias string, options tagOptions) {
+	for _, tagName := range tagNames {
+		if tag := field.Tag.Get(tagName); tag != "" {
+			alias, options = parseTag(tag)
+			break
+		}
 	}
+
 	if alias == "" {
 		alias = field.Name
 	}

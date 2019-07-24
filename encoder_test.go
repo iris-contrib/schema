@@ -314,7 +314,7 @@ func valsExist(t *testing.T, key string, expect []string, result map[string][]st
 
 func valNotExists(t *testing.T, key string, result map[string][]string) {
 	if val, ok := result[key]; ok {
-		t.Error("Key not ommited. Expected: empty; got: " + val[0] + ".")
+		t.Error("Key not omitted. Expected: empty; got: " + val[0] + ".")
 	}
 }
 

@@ -34,10 +34,15 @@ func (e *Encoder) RegisterEncoder(value interface{}, encoder func(reflect.Value)
 	e.regenc[reflect.TypeOf(value)] = encoder
 }
 
-// SetAliasTag changes the tag used to locate custom field aliases.
-// The default tag is "schema".
-func (e *Encoder) SetAliasTag(tag string) {
-	e.cache.tag = tag
+// AddAliasTag adds a tag used to locate custom field aliases.
+// Defaults are "schema", "form" and "url".
+func (e *Encoder) AddAliasTag(tag ...string) {
+	e.cache.tags = append(e.cache.tags, tag...)
+}
+
+// SetAliasTag overrides the tags.
+func (e *Encoder) SetAliasTag(tag ...string) {
+	e.cache.tags = tag
 }
 
 // isValidStructPointer test if input value is a valid struct pointer.
@@ -80,7 +85,7 @@ func (e *Encoder) encode(v reflect.Value, dst map[string][]string) error {
 	errors := MultiError{}
 
 	for i := 0; i < v.NumField(); i++ {
-		name, opts := fieldAlias(t.Field(i), e.cache.tag)
+		name, opts := fieldAlias(t.Field(i), e.cache.tags)
 		if name == "-" {
 			continue
 		}

@@ -24,10 +24,15 @@ type Decoder struct {
 	ignoreUnknownKeys bool
 }
 
-// SetAliasTag changes the tag used to locate custom field aliases.
-// The default tag is "schema".
-func (d *Decoder) SetAliasTag(tag string) {
-	d.cache.tag = tag
+// AddAliasTag adds a tag used to locate custom field aliases.
+// Defaults are "schema", "form" and "url".
+func (d *Decoder) AddAliasTag(tag ...string) {
+	d.cache.tags = append(d.cache.tags, tag...)
+}
+
+// SetAliasTag overrides the tags.
+func (d *Decoder) SetAliasTag(tag ...string) {
+	d.cache.tags = tag
 }
 
 // ZeroEmpty controls the behaviour when the decoder encounters empty values
