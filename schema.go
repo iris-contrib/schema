@@ -1,13 +1,15 @@
 package schema
 
 var (
-	defaultDecoder = NewDecoder() // form, url, param, schema.
+	defaultDecoder = NewDecoder() // form, url, header, param, schema.
 	// Form Decoder. The default instance for DecodeForm function.
 	Form = NewDecoder().SetAliasTag("form")
 	// Query Decoder. The default instance for DecodeQuery function.
 	Query = NewDecoder().SetAliasTag("url").IgnoreUnknownKeys(true) // allow unknown url queries
+	// Headers Decoder. The default instance for DecodeHeaders function.
+	Headers = NewDecoder().SetAliasTag("header").IgnoreUnknownKeys(true)
 	// Params Decoder. The default instance for DecodeParams function.
-	Params = NewDecoder().SetAliasTag("param").IgnoreUnknownKeys(true) //  and dynamic path parameters.
+	Params = NewDecoder().SetAliasTag("param").IgnoreUnknownKeys(true)
 )
 
 // Decode maps "values" to "ptr".
@@ -26,6 +28,12 @@ func DecodeForm(values map[string][]string, ptr interface{}) error {
 // With "url" tag for fields.
 func DecodeQuery(values map[string][]string, ptr interface{}) error {
 	return Query.Decode(ptr, values)
+}
+
+// DecodeHeaders maps "values" to "ptr".
+// With "header" tag for fields.
+func DecodeHeaders(values map[string][]string, ptr interface{}) error {
+	return Headers.Decode(ptr, values)
 }
 
 // DecodeParams maps "values" to "ptr".
