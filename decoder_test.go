@@ -69,9 +69,7 @@ func (id *S19) UnmarshalText(text []byte) error {
 	if len(buf) > len(*id) {
 		return errors.New("out of range")
 	}
-	for i := range buf {
-		(*id)[i] = buf[i]
-	}
+	copy((*id)[:], buf)
 	return nil
 }
 
@@ -1161,7 +1159,7 @@ type S12B struct {
 	ID []string
 }
 
-//Decode should not split on , into a slice for string only
+// Decode should not split on , into a slice for string only
 func TestCSVStringSlice(t *testing.T) {
 	data := map[string][]string{
 		"ID": {"0,1"},
@@ -1177,7 +1175,7 @@ func TestCSVStringSlice(t *testing.T) {
 	}
 }
 
-//Invalid data provided by client should not panic (github issue 33)
+// Invalid data provided by client should not panic (github issue 33)
 func TestInvalidDataProvidedByClient(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {

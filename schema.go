@@ -10,6 +10,8 @@ var (
 	Headers = NewDecoder().SetAliasTag("header").IgnoreUnknownKeys(true)
 	// Params Decoder. The default instance for DecodeParams function.
 	Params = NewDecoder().SetAliasTag("param").IgnoreUnknownKeys(true)
+	// ContextValues Decoder. The default instance for DecodeContext function.
+	ContextValues = NewDecoder().SetAliasTag("context").IgnoreUnknownKeys(true)
 )
 
 // Decode maps "values" to "ptr".
@@ -40,6 +42,12 @@ func DecodeHeaders(values map[string][]string, ptr interface{}) error {
 // With "param" tag for fields.
 func DecodeParams(values map[string][]string, ptr interface{}) error {
 	return Params.Decode(ptr, values)
+}
+
+// DecodeContextValues maps "values" to "ptr".
+// With "context" tag for fields.
+func DecodeContextValues(values map[string][]string, ptr interface{}) error {
+	return ContextValues.Decode(ptr, values)
 }
 
 // IsErrPath reports whether the incoming error is type of unknown field passed,

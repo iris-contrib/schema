@@ -205,7 +205,7 @@ func TestCompatSlices(t *testing.T) {
 		t.Errorf("Dncoder has non-nil error: %v", err)
 	}
 
-	if len(src.Ints) != len(dst.Ints) || len(src.Ones) != len(src.Ones) {
+	if len(src.Ints) != len(dst.Ints) || len(src.Ones) != len(dst.Ones) {
 		t.Fatalf("Expected %v, got %v", src, dst)
 	}
 
@@ -453,7 +453,7 @@ func TestRegisterEncoderStructIsZero(t *testing.T) {
 			t.Error("expected tim1 to be present")
 		}
 
-		if "2020-08-04T13:30:01Z" != ta[0] {
+		if ta[0] != "2020-08-04T13:30:01Z" {
 			t.Error("expected correct tim1 time")
 		}
 
