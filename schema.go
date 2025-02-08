@@ -16,37 +16,37 @@ var (
 
 // Decode maps "values" to "ptr".
 // With one of the "form", "url" or "schema" tag fields that can override the field's name mapping to key.
-func Decode(values map[string][]string, ptr interface{}) error {
+func Decode(values map[string][]string, ptr any) error {
 	return defaultDecoder.Decode(ptr, values)
 }
 
 // DecodeForm maps "values" to "ptr".
 // With "form" tag for fields.
-func DecodeForm(values map[string][]string, ptr interface{}) error {
+func DecodeForm(values map[string][]string, ptr any) error {
 	return Form.Decode(ptr, values)
 }
 
 // DecodeQuery maps "values" to "ptr".
 // With "url" tag for fields.
-func DecodeQuery(values map[string][]string, ptr interface{}) error {
+func DecodeQuery(values map[string][]string, ptr any) error {
 	return Query.Decode(ptr, values)
 }
 
 // DecodeHeaders maps "values" to "ptr".
 // With "header" tag for fields.
-func DecodeHeaders(values map[string][]string, ptr interface{}) error {
+func DecodeHeaders(values map[string][]string, ptr any) error {
 	return Headers.Decode(ptr, values)
 }
 
 // DecodeParams maps "values" to "ptr".
 // With "param" tag for fields.
-func DecodeParams(values map[string][]string, ptr interface{}) error {
+func DecodeParams(values map[string][]string, ptr any) error {
 	return Params.Decode(ptr, values)
 }
 
 // DecodeContextValues maps "values" to "ptr".
 // With "context" tag for fields.
-func DecodeContextValues(values map[string][]string, ptr interface{}) error {
+func DecodeContextValues(values map[string][]string, ptr any) error {
 	return ContextValues.Decode(ptr, values)
 }
 
